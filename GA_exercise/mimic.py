@@ -1,4 +1,4 @@
-#This is the code for SAT 405
+#This is the code for SAT 405 mimic
 
 # imports
 import math
@@ -9,36 +9,41 @@ import matplotlib.pyplot as plt
 import time
 from itertools import cycle
 
-np.set_printoptions(precision=3, suppress=True)
 
-# Variable parameters
-tmax = 30
-crossover_rate_policy = 0.9
-mutation_rate_virus = 0.00000001
-mutation_rate_policy = 0.05
-detrimental_policy = 1
-baseR = 2.63
-seed_ID = 9
-show_intermediary_plots = 0
+def main():
+    np.set_printoptions(precision=3, suppress=True)
+    # Variable parameters
+    tmax = 30
+    crossover_rate_policy = 0.9
+    mutation_rate_virus = 0.00000001
+    mutation_rate_policy = 0.05
+    detrimental_policy = 1
+    baseR = 2.63
+    seed_ID = 9
+    show_intermediary_plots = 0
 
+    distribution_virus_best_genome, effectiveR, virusR_history, cases, policyR_history, virus_diversity = coevolution(
+        tmax,
+        crossover_rate_policy,
+        mutation_rate_virus,
+        mutation_rate_policy,
+        detrimental_policy,
+        baseR,
+        seed_ID)
 
-def coevolution(tmax, crossover_rate_policy, mutation_rate_virus, mutation_rate_policy, detrimental_policy, baseR,
-                seedID):
-    random.seed(seed_ID)
+    print(distribution_virus_best_genome)
+    print(effectiveR)
+    print(virusR_history)
+    print(cases)
+    print(policyR_history)
+    print(virus_diversity)
 
-    # Fixed parameters
-    population_policy_size = 100
-    virus_size = 10
-    initial_virus_population = 10
-
-    mut = np.arange(-1, 1 + 1 / 10, (2 / (virus_size - 1)))
-    policy_size = 46
-
+def initNPI():
     # Parameters for non pharmaceutical interventions (NPIs) from Haug et al (2020)
     npi = [round(random.uniform(-0.36, -0.18), 2), round(random.uniform(-0.24, -0.16), 2),
            round(random.uniform(-0.26, -0.08), 2), round(random.uniform(-0.16, -0.08), 2),
            round(random.uniform(-0.16, -0.04), 2), round(random.uniform(-0.18, 0), 2)]
-    npi =    + [round(random.uniform(-0.36, 0), 2), round(random.uniform(-0.28, 0), 2),
+    npi = npi + [round(random.uniform(-0.36, 0), 2), round(random.uniform(-0.28, 0), 2),
                  round(random.uniform(-0.2, 0.1), 2), round(random.uniform(-0.2, 0.05), 2)]
     # measures for special populations
     npi = npi + [round(random.uniform(-0.22, 0), 2), round(random.uniform(-0.2, 0.02), 2),
@@ -68,6 +73,22 @@ def coevolution(tmax, crossover_rate_policy, mutation_rate_virus, mutation_rate_
     npi = npi + [round(random.uniform(-0.16, 0), 2), round(random.uniform(0, 0.04), 2),
                  round(random.uniform(0, 0.04), 2), round(random.uniform(-0.06, 0), 2),
                  round(random.uniform(-0.16, 0), 2), round(random.uniform(0, 0.06), 2)]
+    return npi
+
+def coevolution(tmax, crossover_rate_policy, mutation_rate_virus, mutation_rate_policy, detrimental_policy, baseR,
+                seed_ID):
+    random.seed(seed_ID)
+
+    # Fixed parameters
+    population_policy_size = 100
+    virus_size = 10
+    initial_virus_population = 10
+
+    mut = np.arange(-1, 1 + 1 / 10, (2 / (virus_size - 1)))
+    policy_size = 46
+
+    npi = initNPI()
+
 
     # Initial sampling for viruses
     population_viruses = np.zeros((initial_virus_population, virus_size))
@@ -398,135 +419,5 @@ def coevolution(tmax, crossover_rate_policy, mutation_rate_virus, mutation_rate_
     return distribution_virus_best_genome, effectiveR, virusR_history, cases, policyR_history, virus_diversity
 
 
-tmax = 20
-crossover_rate_policy = 0.5
-mutation_rate_virus = 0.0001
-mutation_rate_policy = 0.05
-detrimental_policy = 0
-baseR = 2.63
-seed_ID = 10
-show_intermediary_plots = 0
-
-# coevolution(tmax, crossover_rate_policy, mutation_rate_virus, mutation_rate_policy,detrimental_policy,baseR,seed_ID)
-distribution_virus_best_genome, effectiveR, virusR_history, cases, policyR_history, virus_diversity = coevolution(tmax,
-                                                                                                                  crossover_rate_policy,
-                                                                                                                  mutation_rate_virus,
-                                                                                                                  mutation_rate_policy,
-                                                                                                                  detrimental_policy,
-                                                                                                                  baseR,
-                                                                                                                  seed_ID)
-distribution_virus_best_genome_coev = distribution_virus_best_genome
-effectiveR_coev = effectiveR
-virusR_history_coev = virusR_history
-cases_coev = cases
-policyR_history_coev = policyR_history
-virus_diversity_coev = virus_diversity
-
-print("Scenario where policy does not evolve")
-# coevolution(tmax, 0, mutation_rate_virus, 0,detrimental_policy,baseR,seed_ID)
-distribution_virus_best_genome, effectiveR, virusR_history, cases, policyR_history, virus_diversity = coevolution(tmax,
-                                                                                                                  0,
-                                                                                                                  mutation_rate_virus,
-                                                                                                                  0,
-                                                                                                                  detrimental_policy,
-                                                                                                                  baseR,
-                                                                                                                  seed_ID)
-distribution_virus_best_genome_vire = distribution_virus_best_genome
-effectiveR_vire = effectiveR
-virusR_history_vire = virusR_history
-cases_vire = cases
-policyR_history_vire = policyR_history
-virus_diversity_vire = virus_diversity
-
-print("Scenario where virus does not evolve")
-# coevolution(tmax, crossover_rate_policy, 0, mutation_rate_policy,detrimental_policy,baseR,seed_ID)
-distribution_virus_best_genome, effectiveR, virusR_history, cases, policyR_history, virus_diversity = coevolution(tmax,
-                                                                                                                  crossover_rate_policy,
-                                                                                                                  0,
-                                                                                                                  mutation_rate_policy,
-                                                                                                                  detrimental_policy,
-                                                                                                                  baseR,
-                                                                                                                  seed_ID)
-distribution_virus_best_genome_poe = distribution_virus_best_genome
-effectiveR_poe = effectiveR
-virusR_history_poe = virusR_history
-cases_poe = cases
-policyR_history_poe = policyR_history
-virus_diversity_poe = virus_diversity
-
-print(distribution_virus_best_genome_coev)
-print(distribution_virus_best_genome_vire)
-print(distribution_virus_best_genome_poe)
-
-#### COMPARISON PLOTS BETWEEN REGIMES ####
-
-# Graphical results
-timer = list(range(0, tmax + 1))
-
-# cases and cumulative cases
-plt.plot(timer, np.log(cases_coev), label="Coevolution", color="red")
-plt.plot(timer, np.log(cases_vire), label="Virus-only evolution", color="green")
-plt.plot(timer, np.log(cases_poe), label="Policy-only evolution", color="blue")
-plt.xlabel('Time (weeks)')
-plt.ylabel('Number')
-plt.title('Daily cases over time (log)')
-plt.legend()
-plt.savefig('cases.eps')
-plt.show()
-
-# evolution of average virus R
-plt.plot(timer, virusR_history_coev, label="Coevolution", color="red")
-plt.plot(timer, virusR_history_vire, label="Virus-only evolution", color="green")
-plt.plot(timer, virusR_history_poe, label="Policy-only evolution", color="blue")
-plt.xlabel('Time (weeks)')
-plt.ylabel('Number')
-plt.title('Average virus R over time')
-plt.legend()
-plt.savefig('virusR.eps')
-plt.show()
-
-# evolution of policy virus R
-plt.plot(timer, policyR_history_coev, label="Coevolution", color="red")
-plt.plot(timer, policyR_history_vire, label="Virus-only evolution", color="green")
-plt.plot(timer, policyR_history_poe, label="Policy-only evolution", color="blue")
-plt.xlabel('Time (weeks)')
-plt.ylabel('Number')
-plt.title('Average policy R over time')
-plt.legend()
-plt.savefig('policyR.eps')
-plt.show()
-
-# evolution of policy virus R
-plt.plot(timer, effectiveR_coev, label="Coevolution", color="red")
-plt.plot(timer, effectiveR_vire, label="Virus-only evolution", color="green")
-plt.plot(timer, effectiveR_poe, label="Policy-only evolution", color="blue")
-plt.xlabel('Time (weeks)')
-plt.ylabel('Number')
-plt.axhline(y=1, color="gray", label="Neutral reproduction rate")
-plt.title('Average effective R over time')
-plt.legend()
-plt.savefig('effectiveR.eps')
-plt.show()
-
-# evolution of highest R mutation variant
-plt.plot(timer, distribution_virus_best_genome_coev, label="Coevolution", color="red")
-plt.plot(timer, distribution_virus_best_genome_vire, label="Virus-only evolution", color="green")
-plt.plot(timer, distribution_virus_best_genome_poe, label="Policy-only evolution", color="blue")
-plt.xlabel('Time (weeks)')
-plt.ylabel('Frequency')
-plt.title('Frequency of extreme variant genes over time')
-plt.legend()
-plt.savefig('virus_genome.eps')
-plt.show()
-
-# Evolution of virus variants number
-plt.plot(timer, virus_diversity_coev, label="Coevolution", color="red")
-plt.plot(timer, virus_diversity_vire, label="Virus-only evolution", color="green")
-plt.plot(timer, virus_diversity_poe, label="Policy-only evolution", color="blue")
-plt.xlabel('Time (weeks)')
-plt.ylabel('Number')
-plt.title('Diversity (number) of virus strains over time')
-plt.legend()
-plt.savefig('diversity.eps')
-plt.show()
-
+if __name__ == '__main__':
+    main()
