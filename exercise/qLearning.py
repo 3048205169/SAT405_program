@@ -2,42 +2,43 @@ import random
 
 import numpy.random
 
+R = [
+    [-1, -1, -1, -1, 0, -1],
+    [-1, -1, -1, 0, -1, 100],
+    [-1, -1, -1, 0, -1, -1],
+    [-1, 0, 0, -1, 0, -1],
+    [0, -1, -1, 0, -1, 100],
+    [-1, 0, -1, -1, 0, 100]
+]
 
+Q = [
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0],
+]
 
 def main():
-    R = [
-        [-1, -1, -1, -1, 0, -1],
-         [-1, -1, -1, 0, -1, 100],
-         [-1, -1, -1, 0, -1, -1],
-         [-1, 0, 0, -1, 0, -1],
-         [0, -1, -1, 0, -1, 100],
-         [-1, 0, -1, -1, 0, 100]
-         ]
 
-    Q = [
-         [0, 0, 0, 0, 0, 0],
-         [0, 0, 0, 0, 0, 0],
-         [0, 0, 0, 0, 0, 0],
-         [0, 0, 0, 0, 0, 0],
-         [0, 0, 0, 0, 0, 0],
-         [0, 0, 0, 0, 0, 0],
-         ]
 
     target = 5
 
     count = 0
     gama = 0.8
 
-    while count<=1000:
+    while count<=100:
         s = numpy.random.randint(0,6)
-        a = getA(s,R)
+        a = getA(s)
         print("start=======================")
         while(a!=target):
             s_new = a
 
-            a_new = getMax(Q,R,a)
+            a_new = getMax(a)
 
-            Q[s][a] = R[s][a] + gama * Q[s_new][a_new]
+            # Q[s][a] = R[s][a] + gama * Q[s_new][a_new]
+            Q[s][a] = 3
             s = s_new
             a = a_new
             print(Q)
@@ -47,7 +48,7 @@ def main():
 
 
 
-def getMax(Q,R,a):
+def getMax(a):
     candidate = []
     for item in range(0,len(R[a])):
         if (R[a][item]!=-1):
@@ -75,7 +76,7 @@ def getMax(Q,R,a):
 
 
 
-def getA(s,R):
+def getA(s):
     candidate = []
     for item in range(0,len(R[s])):
         if (R[s][item]!=-1):

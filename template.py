@@ -1,5 +1,3 @@
-#This is the code for SAT 405
-
 # imports
 import math
 import random
@@ -8,18 +6,64 @@ import matplotlib
 import matplotlib.pyplot as plt
 import time
 from itertools import cycle
+# from google.colab import files
 
 np.set_printoptions(precision=3, suppress=True)
 
+ount = 1
+
 # Variable parameters
-tmax = 30
-crossover_rate_policy = 0.9
-mutation_rate_virus = 0.00000001
-mutation_rate_policy = 0.05
+#初始化数据
+# tmax = 30
+# crossover_rate_policy = 0.9
+# mutation_rate_virus = 0.00000001
+# mutation_rate_policy = 0.05
+# detrimental_policy = 1
+# baseR = 2.63
+# seed_ID = 9
+# show_intermediary_plots = 0
+
+#1
+# tmax = 20
+# crossover_rate_policy = 0.5
+# mutation_rate_virus = 0.0001
+# mutation_rate_policy = 0.05
+# detrimental_policy = 0
+# baseR = 2.63
+# seed_ID = 10
+# show_intermediary_plots = 0
+
+#2
+# tmax = 20
+# crossover_rate_policy = 0.5
+# mutation_rate_virus = 0.01
+# mutation_rate_policy = 0.01
+# detrimental_policy = 1
+# baseR = 1.8
+# seed_ID = 9
+# show_intermediary_plots = 0
+
+#3
+tmax = 20
+crossover_rate_policy = 0.5
+mutation_rate_virus = 0.1
+mutation_rate_policy = 0.1
 detrimental_policy = 1
-baseR = 2.63
+baseR = 1.3
 seed_ID = 9
 show_intermediary_plots = 0
+
+
+tmax = 20
+crossover_rate_policy = 0.5
+mutation_rate_virus = 0.1
+mutation_rate_policy = 0.1
+detrimental_policy = 1
+baseR = 1.3
+seed_ID = 9
+show_intermediary_plots = 0
+
+
 
 
 def coevolution(tmax, crossover_rate_policy, mutation_rate_virus, mutation_rate_policy, detrimental_policy, baseR,
@@ -38,7 +82,7 @@ def coevolution(tmax, crossover_rate_policy, mutation_rate_virus, mutation_rate_
     npi = [round(random.uniform(-0.36, -0.18), 2), round(random.uniform(-0.24, -0.16), 2),
            round(random.uniform(-0.26, -0.08), 2), round(random.uniform(-0.16, -0.08), 2),
            round(random.uniform(-0.16, -0.04), 2), round(random.uniform(-0.18, 0), 2)]
-    npi =    + [round(random.uniform(-0.36, 0), 2), round(random.uniform(-0.28, 0), 2),
+    npi = npi + [round(random.uniform(-0.36, 0), 2), round(random.uniform(-0.28, 0), 2),
                  round(random.uniform(-0.2, 0.1), 2), round(random.uniform(-0.2, 0.05), 2)]
     # measures for special populations
     npi = npi + [round(random.uniform(-0.22, 0), 2), round(random.uniform(-0.2, 0.02), 2),
@@ -64,7 +108,7 @@ def coevolution(tmax, crossover_rate_policy, mutation_rate_virus, mutation_rate_
     npi = npi + [round(random.uniform(-0.18, 0), 2), round(random.uniform(0, 0.18), 2),
                  round(random.uniform(-0.24, 0), 2), round(random.uniform(-0.18, 0), 2),
                  round(random.uniform(0, 0.04), 2)]
-    #
+    # surveillance
     npi = npi + [round(random.uniform(-0.16, 0), 2), round(random.uniform(0, 0.04), 2),
                  round(random.uniform(0, 0.04), 2), round(random.uniform(-0.06, 0), 2),
                  round(random.uniform(-0.16, 0), 2), round(random.uniform(0, 0.06), 2)]
@@ -398,14 +442,14 @@ def coevolution(tmax, crossover_rate_policy, mutation_rate_virus, mutation_rate_
     return distribution_virus_best_genome, effectiveR, virusR_history, cases, policyR_history, virus_diversity
 
 
-tmax = 20
-crossover_rate_policy = 0.5
-mutation_rate_virus = 0.0001
-mutation_rate_policy = 0.05
-detrimental_policy = 0
-baseR = 2.63
-seed_ID = 10
-show_intermediary_plots = 0
+# tmax = 20
+# crossover_rate_policy = 0.5
+# mutation_rate_virus = 0.0001
+# mutation_rate_policy = 0.05
+# detrimental_policy = 0
+# baseR = 2.63
+# seed_ID = 10
+# show_intermediary_plots = 0
 
 # coevolution(tmax, crossover_rate_policy, mutation_rate_virus, mutation_rate_policy,detrimental_policy,baseR,seed_ID)
 distribution_virus_best_genome, effectiveR, virusR_history, cases, policyR_history, virus_diversity = coevolution(tmax,
@@ -471,7 +515,8 @@ plt.xlabel('Time (weeks)')
 plt.ylabel('Number')
 plt.title('Daily cases over time (log)')
 plt.legend()
-plt.savefig('cases.eps')
+plt.savefig('cases.png')
+# files.download('cases.png')
 plt.show()
 
 # evolution of average virus R
@@ -482,7 +527,8 @@ plt.xlabel('Time (weeks)')
 plt.ylabel('Number')
 plt.title('Average virus R over time')
 plt.legend()
-plt.savefig('virusR.eps')
+plt.savefig('virusR.png')
+# files.download('virusR.png')
 plt.show()
 
 # evolution of policy virus R
@@ -493,7 +539,8 @@ plt.xlabel('Time (weeks)')
 plt.ylabel('Number')
 plt.title('Average policy R over time')
 plt.legend()
-plt.savefig('policyR.eps')
+plt.savefig('policyR.png')
+# files.download('policyR.png')
 plt.show()
 
 # evolution of policy virus R
@@ -505,7 +552,8 @@ plt.ylabel('Number')
 plt.axhline(y=1, color="gray", label="Neutral reproduction rate")
 plt.title('Average effective R over time')
 plt.legend()
-plt.savefig('effectiveR.eps')
+plt.savefig('effectiveR.png')
+# files.download('effectiveR.png')
 plt.show()
 
 # evolution of highest R mutation variant
@@ -516,7 +564,8 @@ plt.xlabel('Time (weeks)')
 plt.ylabel('Frequency')
 plt.title('Frequency of extreme variant genes over time')
 plt.legend()
-plt.savefig('virus_genome.eps')
+plt.savefig('virus_genome.png')
+# files.download('virus_genome.png')
 plt.show()
 
 # Evolution of virus variants number
@@ -527,6 +576,9 @@ plt.xlabel('Time (weeks)')
 plt.ylabel('Number')
 plt.title('Diversity (number) of virus strains over time')
 plt.legend()
-plt.savefig('diversity.eps')
+plt.savefig('diversity.png')
+# files.download('diversity.png')
 plt.show()
+
+
 
