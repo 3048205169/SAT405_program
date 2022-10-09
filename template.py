@@ -23,19 +23,19 @@ ount = 1
 # seed_ID = 9
 # show_intermediary_plots = 0
 
-#1
-# tmax = 20
-# crossover_rate_policy = 0.5
-# mutation_rate_virus = 0.0001
-# mutation_rate_policy = 0.05
+# 1
+# tmax = 15
+# crossover_rate_policy = 0.05
+# mutation_rate_virus = 0.005
+# mutation_rate_policy = 0.005
 # detrimental_policy = 0
 # baseR = 2.63
 # seed_ID = 10
 # show_intermediary_plots = 0
 
-#2
-# tmax = 20
-# crossover_rate_policy = 0.5
+# 2
+# tmax = 15
+# crossover_rate_policy = 0.03
 # mutation_rate_virus = 0.01
 # mutation_rate_policy = 0.01
 # detrimental_policy = 1
@@ -44,26 +44,35 @@ ount = 1
 # show_intermediary_plots = 0
 
 #3
-tmax = 20
-crossover_rate_policy = 0.5
-mutation_rate_virus = 0.1
-mutation_rate_policy = 0.1
+# tmax = 15
+# crossover_rate_policy = 0.0001
+# mutation_rate_virus = 0.03
+# mutation_rate_policy = 0.015
+# detrimental_policy = 0
+# baseR = 1.3
+# seed_ID = 9
+# show_intermediary_plots = 0
+
+#4
+# tmax = 15
+# crossover_rate_policy = 0.02
+# mutation_rate_virus = 0.02
+# mutation_rate_policy = 0.02
+# detrimental_policy = 0
+# baseR = 0.1
+# seed_ID = 9
+# show_intermediary_plots = 0
+
+
+#5
+tmax = 15
+crossover_rate_policy = 0.02
+mutation_rate_virus = 0.02
+mutation_rate_policy = 0.02
 detrimental_policy = 1
-baseR = 1.3
+baseR = 3
 seed_ID = 9
 show_intermediary_plots = 0
-
-
-tmax = 20
-crossover_rate_policy = 0.5
-mutation_rate_virus = 0.1
-mutation_rate_policy = 0.1
-detrimental_policy = 1
-baseR = 1.3
-seed_ID = 9
-show_intermediary_plots = 0
-
-
 
 
 def coevolution(tmax, crossover_rate_policy, mutation_rate_virus, mutation_rate_policy, detrimental_policy, baseR,
@@ -472,8 +481,7 @@ distribution_virus_best_genome, effectiveR, virusR_history, cases, policyR_histo
                                                                                                                   0,
                                                                                                                   mutation_rate_virus,
                                                                                                                   0,
-                                                                                                                  detrimental_policy,
-                                                                                                                  baseR,
+                                                                                                                  detrimental_policy,                                                                                 baseR,
                                                                                                                   seed_ID)
 distribution_virus_best_genome_vire = distribution_virus_best_genome
 effectiveR_vire = effectiveR
@@ -507,6 +515,11 @@ print(distribution_virus_best_genome_poe)
 # Graphical results
 timer = list(range(0, tmax + 1))
 
+#modify cases length  to timer
+
+cases_coev = cases_coev+[0]*(len(timer)-len(cases_coev))
+cases_vire = cases_vire+[0]*(len(timer)-len(cases_vire))
+cases_poe = cases_poe+[0]*(len(timer)-len(cases_poe))
 # cases and cumulative cases
 plt.plot(timer, np.log(cases_coev), label="Coevolution", color="red")
 plt.plot(timer, np.log(cases_vire), label="Virus-only evolution", color="green")
@@ -518,6 +531,12 @@ plt.legend()
 plt.savefig('cases.png')
 # files.download('cases.png')
 plt.show()
+
+
+#modify length
+virusR_history_coev = virusR_history_coev+[0]*(len(timer)-len(virusR_history_coev))
+virusR_history_vire = virusR_history_vire+[0]*(len(timer)-len(virusR_history_vire))
+virusR_history_poe = virusR_history_poe+[0]*(len(timer)-len(virusR_history_poe))
 
 # evolution of average virus R
 plt.plot(timer, virusR_history_coev, label="Coevolution", color="red")
@@ -531,6 +550,12 @@ plt.savefig('virusR.png')
 # files.download('virusR.png')
 plt.show()
 
+
+#modify length
+policyR_history_coev = policyR_history_coev+[0]*(len(timer)-len(policyR_history_coev))
+policyR_history_vire = policyR_history_vire+[0]*(len(timer)-len(policyR_history_vire))
+policyR_history_poe = policyR_history_poe+[0]*(len(timer)-len(policyR_history_poe))
+
 # evolution of policy virus R
 plt.plot(timer, policyR_history_coev, label="Coevolution", color="red")
 plt.plot(timer, policyR_history_vire, label="Virus-only evolution", color="green")
@@ -543,6 +568,14 @@ plt.savefig('policyR.png')
 # files.download('policyR.png')
 plt.show()
 
+
+#modify length
+effectiveR_coev = effectiveR_coev.tolist()
+effectiveR_coev = effectiveR_coev+[0]*(len(timer)-len(effectiveR_coev))
+effectiveR_vire = effectiveR_vire.tolist()
+effectiveR_vire = effectiveR_vire+[0]*(len(timer)-len(effectiveR_vire))
+effectiveR_poe = effectiveR_poe.tolist()
+effectiveR_poe = effectiveR_poe+[0]*(len(timer)-len(effectiveR_poe))
 # evolution of policy virus R
 plt.plot(timer, effectiveR_coev, label="Coevolution", color="red")
 plt.plot(timer, effectiveR_vire, label="Virus-only evolution", color="green")
@@ -556,6 +589,12 @@ plt.savefig('effectiveR.png')
 # files.download('effectiveR.png')
 plt.show()
 
+
+#modify length
+distribution_virus_best_genome_coev = distribution_virus_best_genome_coev+[0]*(len(timer)-len(distribution_virus_best_genome_coev))
+distribution_virus_best_genome_vire = distribution_virus_best_genome_vire+[0]*(len(timer)-len(distribution_virus_best_genome_vire))
+distribution_virus_best_genome_poe = distribution_virus_best_genome_poe+[0]*(len(timer)-len(distribution_virus_best_genome_poe))
+
 # evolution of highest R mutation variant
 plt.plot(timer, distribution_virus_best_genome_coev, label="Coevolution", color="red")
 plt.plot(timer, distribution_virus_best_genome_vire, label="Virus-only evolution", color="green")
@@ -567,6 +606,12 @@ plt.legend()
 plt.savefig('virus_genome.png')
 # files.download('virus_genome.png')
 plt.show()
+
+
+#modify length
+virus_diversity_coev = virus_diversity_coev+[0]*(len(timer)-len(virus_diversity_coev))
+virus_diversity_vire = virus_diversity_vire+[0]*(len(timer)-len(virus_diversity_vire))
+virus_diversity_poe = virus_diversity_poe+[0]*(len(timer)-len(virus_diversity_poe))
 
 # Evolution of virus variants number
 plt.plot(timer, virus_diversity_coev, label="Coevolution", color="red")

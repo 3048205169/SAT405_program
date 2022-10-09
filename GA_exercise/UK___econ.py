@@ -191,7 +191,7 @@ def simulate(infection_rate, policies, population, init_infection_popu, date, in
     # plt.grid(True,linestyle="--",alpha=0.5)
     plt.xlabel("day")
     plt.ylabel("newly infected population")
-    title = "Chinese COVID-19 epidemic prevention and control"
+    title = "UK COVID-19 epidemic prevention and control with economic"
     plt.title(title)
     # plt.plot(time, infection_pop_arr)
     # plt.plot(time,isolation_pop_arr)
