@@ -14,7 +14,7 @@ infection_pop_arr = []
 infection_pop_new = []
 
 #建立一个数组用来存放政策，也就是政策的list，目前仅仅存在动态清零和躺平两种
-policies=["dynamicZero","herdImmunity"]
+policies=["dynamicZero", "herdImmunity"]
 
 #GA的步骤
 #首先是种群初始化，但是目前只有两种，就生成两个种群，10和01，这里是二择其一的，不能有11存在，但是00可以存在，就是完全不管，任由变异
@@ -133,8 +133,6 @@ def simulate(infection_rate, policies, population, init_infection_popu, date, in
         infection_pop_arr_society[i] = infection_popu_society  #记录当天社会感染总人数
 
         updateIsolationPopArr(isolation_pop_arr)  # 特殊的数据结构
-
-
 
 
 
