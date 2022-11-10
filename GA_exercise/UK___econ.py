@@ -19,10 +19,12 @@ per_cost = 1
 #群体免疫政策持续时间
 herdImmunity = 3
 #动态清零政策持续时间
-dynamicZero = 3
+dynamicZero = 4
 
 initPolicy = ("herdImmunity",herdImmunity)
-R0=3
+R0=1.5
+
+isolation_percent = 0.9
 
 #存储每日的新增感染人数
 infection_pop_new = []
@@ -38,33 +40,42 @@ policies = ["dynamicZero", "herdImmunity"]
 #具体的影响？
 #首先第一天，病毒出现，然后感染百分比增高，假设病毒每一次周期固定感染2%，那么如果是动态清零的政策，则
 #
-population = 1000000
+population = 700000000
+
+#[未感染，社会感染，隔离]
+population_parts = [population,1,0]
 
 init_infection_popu = 1
 isolation_pop = 0
 
 infection_rate_arr = []
 time=[]
-date = 30
+date = 40
 
 #相比于中国需要增加经济因素
 
 def fitness(infection_popu_society,policy,econ_cost):
     #放任自流
     if policy[0] == "herdImmunity":
-        if (infection_popu_society>= 750):
+        if (infection_popu_society>= 10000):
             return (policies[0],dynamicZero)
         else:
             return (policies[1],herdImmunity)
         #如果是动态清零
 
-    # 如果经济代价超过阈值，则实现开放经济也就是herdImmunity
-    if econ_cost > 4000:
+    #如果是严格管控
+    # 全面均衡经济代价以及感染人数，如果感染人数很高很高，那么可以适当放松
+    #极端情况就是完全开放
+    global isolation_percent
+    if econ_cost > 300000:
+        isolation_percent = 0.9
         return (policies[1],herdImmunity)
-    if(policies[0]==policy[0]):
+    elif(econ_cost >100000):
+        isolation_percent = 0.6
         return (policies[0],dynamicZero)
     else:
-        return (policies[1],herdImmunity)
+        return (policies[0], dynamicZero)
+
 
 
 
@@ -135,28 +146,44 @@ def simulate(infection_rate, policies, population, init_infection_popu, date, in
 
 
     for i in range(0, date):
-        infection_rate_prev = infection_rate
+
+        if(infection_popu_society > 200000):
+            R0 = 0.6
+        elif(infection_popu_society < 80000):
+            R0 = 2
 
         infection_popu_new = infection_popu_society*R0
-
-        # if(infection_popu_new >= 20000):
-        #     infection_popu_new = 20000
 
         infection_pop_new[i] = infection_popu_new
 
         infection_popu_society = infection_popu_society*(1+R0);#当天社会感染人数根据R0值翻倍
 
 
-        econ_cost = 0
+
+        global population_parts
+        if(population_parts[0]-infection_popu_new<0):
+            break
+
+        population_parts = [population_parts[0]-infection_popu_new,
+                            population_parts[1]+infection_popu_new,
+                            population_parts[2]]
+
 
         if(policy[0] == "dynamicZero"):
             #严格的动态清零政策
-            isolation_pop = infection_popu_society * 0.7#当天隔离人数=当天社会感染人数*0.7
+            global isolation_percent
+            isolation_pop = infection_popu_society * isolation_percent#当天隔离人数=当天社会感染人数*0.7
+
             econ_cost = per_cost * isolation_pop
             econ_cost_per[i] = econ_cost
             econ_cost_per_sum[i] = sum(econ_cost_per)
-            infection_popu_society = infection_popu_society * 0.1#没有被抓去隔离的当天社会感染者依然在传播病毒
+
+            infection_popu_society = infection_popu_society * (1-isolation_percent)#没有被抓去隔离的当天社会感染者依然在传播病毒
             isolation_pop_arr[i] = (i,isolation_pop,14)#此处存疑，目的是做一下记录
+
+            population_parts = [population_parts[0],
+                                population_parts[1] - isolation_pop,
+                                population_parts[2] + isolation_pop]
 
 
         econ_cost_sum = econ_cost_per_sum[i]
@@ -195,9 +222,12 @@ def simulate(infection_rate, policies, population, init_infection_popu, date, in
     plt.title(title)
     # plt.plot(time, infection_pop_arr)
     # plt.plot(time,isolation_pop_arr)
-    plt.yticks(np.arange(0.0,10000,1))
+    plt.yticks(range(0,400000,40000))
+    plt.xticks(np.arange(0,50,5))
     plt.savefig(title+".jpg")
     plt.show()
+
+
 
 def main():
     simulate(infection_rate, policies, population, init_infection_popu, date, infection_rate_arr, time, infection_pop_arr_society, isolation_pop_arr, isolation_pop, infection_pop_arr,initPolicy,R0,econ_cost_per,econ_cost_per_sum)
