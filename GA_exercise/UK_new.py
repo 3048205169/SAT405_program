@@ -113,7 +113,7 @@ def make_plot():
     plt.figure()
     plt.plot(time,infection_pop_new)
     # plt.grid(True,linestyle="--",alpha=0.5)
-    plt.xlabel("day")
+    plt.xlabel("period")
     plt.ylabel("newly infected population")
     title = "UK COVID-19 epidemic prevention and control with economic"
     plt.title(title)
